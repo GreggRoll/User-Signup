@@ -37,7 +37,7 @@ def validate_form():
         email = ''
 
     if not username_error and not password_error and not verify_error and not email_error:
-        return redirect('/valid_hello_{username}'.format(username))
+        return redirect('/welcome?username={0}'.format(username))
 
     else:
         return render_template('input.html',
@@ -47,9 +47,10 @@ def validate_form():
             email_error = email_error
         )
 
-@app.route("/valid_hello", methods=['POST'])
+
+@app.route("/welcome", methods=['POST', 'GET'])
 def valid_hello():
-    user_name = request.form['username']
+    user_name = request.args.get('username')
     return render_template('hello.html', name=user_name)
     
 app.run()
