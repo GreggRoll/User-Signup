@@ -1,8 +1,9 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, flash, url_for
 import cgi
 import os
 
 app = Flask(__name__)
+app.secret_key = 'some_secret'
 app.config['DEBUG'] = True
 
 @app.route('/signup')
@@ -24,17 +25,27 @@ def validate_form():
     email = request.form['email']
     email_error = ''
 
+    if not username and not password and not verify_password:
+        flash('put in some info!')
+        return redirect(url_for('index'))
+    if username == password:
+        flash('get serious please. normal people dont have a password that equals their username.')
+        return redirect(url_for('index'))
+
     if username == '':
-        username_error = "That's not a valid username"
+        username_error = "Enter a username!"
         username = ''
     if password == '':
-        password_error = "That's not a valid password"
+        password_error = "Enter a password!"
         password == ''
     if password != verify_password:
         verify_error = "Passwords don't match"
-    if '@' and '.' not in email:
-        email_error = "That's not a valid email"
-        email = ''
+    if email == '':
+        pass
+    else:
+        if '@' and '.' not in email:
+            email_error = "That's not a valid email"
+            email = ''
 
     if not username_error and not password_error and not verify_error and not email_error:
         return redirect('/welcome?username={0}'.format(username))
