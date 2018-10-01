@@ -6,6 +6,10 @@ app = Flask(__name__)
 app.secret_key = 'some_secret'
 app.config['DEBUG'] = True
 
+@app.route('/')
+def move_em_to_the_right_spot():
+    return redirect ('/signup')
+
 @app.route('/signup')
 def index():
     return render_template('input.html')
@@ -25,12 +29,13 @@ def validate_form():
     email = request.form['email']
     email_error = ''
 
-    if not username and not password and not verify_password:
-        flash('put in some info!')
-        return redirect(url_for('index'))
-    if username == password:
-        flash('get serious please. normal people dont have a password that equals their username.')
-        return redirect(url_for('index'))
+    # if not username and not password and not verify_password:
+    #     flash('put in some info!')
+    #     return redirect(url_for('index'))
+    
+    # if username == password:
+    #     flash('get serious please. normal people dont have a password that equals their username.')
+    #     return redirect(url_for('index'))
 
     if username == '':
         username_error = "Enter a username!"
@@ -38,8 +43,12 @@ def validate_form():
     if password == '':
         password_error = "Enter a password!"
         password == ''
-    if password != verify_password:
+    if verify_password == '':
+        verify_error = "re-enter your password"
+        verify_password = ''
+    if not verify_error and password != verify_password:
         verify_error = "Passwords don't match"
+        verify_password = ''
     if email == '':
         pass
     else:
