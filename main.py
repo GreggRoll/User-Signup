@@ -40,19 +40,25 @@ def validate_form():
     if username == '':
         username_error = "Enter a username!"
         username = ''
+    elif ' ' in username or len(username) < 3 or len(username) > 20:
+        username_error = "Username is not valid!"
+        username = ''
+     
     if password == '':
         password_error = "Enter a password!"
         password == ''
+    elif ' ' in password or len(password) < 3 or len(password) > 20:
+        password_error = "Password is not valid!"
+        password = ''
+
     if verify_password == '':
         verify_error = "re-enter your password"
         verify_password = ''
     if not verify_error and password != verify_password:
         verify_error = "Passwords don't match"
         verify_password = ''
-    if email == '':
-        pass
-    else:
-        if '@' and '.' not in email:
+
+    if email and '@' and '.' not in email:
             email_error = "That's not a valid email"
             email = ''
 
